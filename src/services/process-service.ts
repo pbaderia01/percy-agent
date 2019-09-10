@@ -33,10 +33,14 @@ export default class ProcessService {
   kill() {
     if (this.isRunning()) {
       const pid = this.getPid()
-      fs.unlinkSync(ProcessService.PID_PATH)
+      this.cleanup()
 
       process.kill(pid, 'SIGHUP')
     }
+  }
+
+  cleanup() {
+    fs.unlinkSync(ProcessService.PID_PATH)
   }
 
   private writePidFile(pid: number) {
