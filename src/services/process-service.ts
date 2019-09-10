@@ -40,7 +40,12 @@ export default class ProcessService {
   }
 
   cleanup() {
-    fs.unlinkSync(ProcessService.PID_PATH)
+    try {
+      fs.unlinkSync(ProcessService.PID_PATH)
+    } catch (e) {
+      // it's fine when the file doesn't exist, raise errors otherwise
+      if (e.code !== 'ENOENT') { throw e }
+    }
   }
 
   private writePidFile(pid: number) {
